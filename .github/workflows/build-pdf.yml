@@ -4,7 +4,7 @@ on:
     - cron: '0 0 * * *'
   push:
     branches:
-      - master
+      - main
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
@@ -37,12 +37,12 @@ jobs:
           miniconda-version: 'latest'
           python-version: 3.8
           environment-file: environment.yml
-          activate-environment: qe-mini-example
-      - name: Build QuantEcon Mini Example
+          activate-environment: cal-icor-docs
+      - name: Build Cal ICOR docs
         shell: bash -l {0}
         run: |
-          jb build mini_book/ --builder pdflatex
+          jb build book/ --builder pdflatex
       - uses: actions/upload-artifact@v2
         with:
           name: pdf
-          path: mini_book/_build/latex/book.pdf
+          path: book/_build/latex/book.pdf
