@@ -27,7 +27,17 @@ jobs:
       - name: Build Cal ICOR docs
         shell: bash -l {0}
         run: jb build book/
+  
+      - name: Clean up the repository state
+        run: |
+          git reset --hard
+          git clean -fdx
 
+      - name: Remove previous GitHub Pages worktree
+        run: |
+          git worktree prune
+          rm -rf github-pages-deploy-action-temp-deployment-folder
+  
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
