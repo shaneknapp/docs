@@ -2,7 +2,7 @@ name: cal-icor-docs
 channels:
   - default
 dependencies:
-  - python=3.12
+  - python=3.9
   - sphinx
   - pip
   - pandas
