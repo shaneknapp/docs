@@ -41,8 +41,8 @@ jobs:
       - name: Build Cal ICOR docs
         shell: bash -l {0}
         run: |
-          jb build book/ --builder pdflatex
+          jb build . --builder pdflatex
       - uses: actions/upload-artifact@v2
         with:
           name: pdf
-          path: book/_build/latex/book.pdf
+          path: _build/latex/book.pdf
