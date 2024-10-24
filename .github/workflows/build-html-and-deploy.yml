@@ -34,9 +34,8 @@ jobs:
           rm -rf github-pages-deploy-action-temp-deployment-folder
   
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        # Push the book's HTML to github-pages
+        uses: peaceiris/actions-gh-pages@v3.6.1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: book/_build/html
-          CLEAN: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./book/_build/html
