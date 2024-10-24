@@ -26,16 +26,11 @@ jobs:
 
       - name: Build Cal ICOR docs
         shell: bash -l {0}
-        run: jb build book/
-
-      - name: Remove previous GitHub Pages worktree
-        run: |
-          git worktree prune
-          rm -rf github-pages-deploy-action-temp-deployment-folder
+        run: jb build .
   
       - name: Deploy 🚀
         # Push the book's HTML to github-pages
         uses: peaceiris/actions-gh-pages@v3.6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./book/_build/html
+          publish_dir: ./_build/html
