@@ -1,7 +1,9 @@
 format: jb-article
 root: docs/index
 sections:
-- file: docs/hub_deployment
+- file: docs/getting_started
+- file: docs/hub_resources
+- file: docs/authentication
+- file: docs/user_environments
 - file: docs/notebooks_materials
 - file: docs/support_resources
-- file: docs/getting_started

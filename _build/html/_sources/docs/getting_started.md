@@ -13,3 +13,14 @@ kernelspec:
 
 # Getting Started
 
+
+## Jupyterhub
+Your institution will have a hub dedicated at an address that will look like this:
+- \<institution\>.jupyter.cal-icor.org
+
+
+
+
+
+
+
