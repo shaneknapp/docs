@@ -1,8 +1,8 @@
 format: jb-article
-root: docs/index
+root: content/index
 sections:
-- file: docs/getting_started
-- file: docs/authentication
-- file: docs/user_environments
-- file: docs/notebooks_materials
-- file: docs/support_resources
+- file: content/getting_started
+- file: content/authentication
+- file: content/user_environments
+- file: content/notebooks_materials
+- file: content/support_resources
