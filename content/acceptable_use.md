@@ -30,7 +30,7 @@ Microsoft Azure (Azure).
 
 **Cal-ICOR Managed Infrastructure**: Any web service, program, or cloud
 infrastructure that Cal-ICOR manages on behalf of a participating Institution
-and hosted on a Cloud Provider.
+and hosted by a Cloud Provider.
 
 ## Acceptable Use Policy
 
