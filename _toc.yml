@@ -2,6 +2,7 @@ format: jb-article
 root: content/index
 sections:
 - file: content/getting_started
+- file: content/acceptable_use
 - file: content/authentication
 - file: content/user_environments
 - file: content/notebooks_materials
