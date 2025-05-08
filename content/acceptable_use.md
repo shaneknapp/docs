@@ -47,7 +47,7 @@ As an Authorized User of Cal-ICOR Managed Infrastructure, you are expected to:
 - Not use another individual's account, or attempt to capture or guess other
   users' passwords.  You may not enable unauthorized users to access
   infrastructure managed by Cal-ICOR by providing them access to your account.
-- You are individually responsible for appropriate use of all resources
+- Be individually responsible for appropriate use of all resources
   provided to you, including your interactive computing session, networking
   infrastructure on your hub, and the software and hardware you use.
 - Comply with and contractual and licence agreements that Cal-ICOR is bound to
