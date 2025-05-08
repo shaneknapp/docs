@@ -40,7 +40,7 @@ policy, the more restrictive policy takes precedence.
 As an Authorized User of Cal-ICOR Managed Infrastructure, you are expected to:
 - Use only the Cal-ICOR Managed Infrastructure and accounts for which you have
   authorization.
-- Not store, process or transmit any sensitive data (e.g., personally
+- Not store, process or transmit any sensitive data (e.g., grades, personally
   identifiable information, protected health information, etc.).  If you are
   unsure whether the data you are using is sensitive, please contact your
   Institution Representative or Cal-ICOR staff.
