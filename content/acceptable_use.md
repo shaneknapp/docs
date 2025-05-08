@@ -67,8 +67,8 @@ As an Authorized User of Cal-ICOR Managed Infrastructure, you are expected to:
   member.
 - Not attempt to use Cal-ICOR Managed Infrastructure for the purposes of
   [mining cryptocurrencies](https://en.wikipedia.org/wiki/Cryptocurrency#Mining)
-  unless explicitly given permission by your Institution *and* Cal-ICOR for
-  research purposes.
+  unless explicitly given permission by your Institution Representitive *and*
+  Cal-ICOR staff for research purposes.
 - Not deliberately perform acts that waste computer resources or
   unfairly monopolize resources to the exclusion of others.  Cal-ICOR Managed
   Infrastructure resources are not unlimited.  Network bandwidth and storage
