@@ -26,7 +26,7 @@ Cal-ICOR Managed Infrastructure on behalf of a participating Institution.
 **Cloud Provider**: Any third-party cloud service provider that Cal-ICOR uses
 to provide computing resources to Authorized Users.  This includes, but is not
 limited to, Amazon Web Services (AWS), Google Cloud Platform (GCP), and
-Microsoft Azure (AzureS).
+Microsoft Azure (Azure).
 
 **Cal-ICOR Managed Infrastructure**: Any web service, program, or cloud
 infrastructure that Cal-ICOR manages on behalf of a participating Institution
