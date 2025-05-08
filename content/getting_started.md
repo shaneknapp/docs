@@ -1,4 +1,3 @@
-(getting_started)=
 # Getting Started
 
 ## Request a Hub

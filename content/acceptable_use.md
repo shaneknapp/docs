@@ -1,4 +1,3 @@
-(acceptable_use)=
 # Cal-ICOR Acceptable Use Policy
 
 :::{admonition} This is not a legal document
