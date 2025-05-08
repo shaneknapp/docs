@@ -23,8 +23,14 @@ Infrastructure by a participating Institution.
 **Institution Representative**: An individual who is authorized to grant access to
 Cal-ICOR Managed Infrastructure on behalf of a participating Institution.
 
+**Cloud Provider**: Any third-party cloud service provider that Cal-ICOR uses
+to provide computing resources to Authorized Users.  This includes, but is not
+limited to, Amazon Web Services (AWS), Google Cloud Platform (GCP), and
+Microsoft Azure (AzureS).
+
 **Cal-ICOR Managed Infrastructure**: Any web service, program, or cloud
-infrastructure that Cal-ICOR manages on behalf of a participating Institution.
+infrastructure that Cal-ICOR manages on behalf of a participating Institution
+and hosted on a Cloud Provider.
 
 ## Acceptable Use Policy
 
