@@ -10,10 +10,10 @@ development work through JupyterLab, VS Code, Shiny, and RStudio.
 
 This documentation is a living resource covering the following topics:
 - **[Getting Started](getting_started)**
-- **[Acceptable Use Policy](acceptable_use)**
 - **[Authentication](authentication)**
 - **[User Environments](user_environments)**
 - **[Notebook and Material Sharing](notebooks_materials)**
+- **[Acceptable Use Policy](acceptable_use)**
 - **[Support Resources](support_resources)**
 
 Feel free to explore the links above for more information on each topic.
