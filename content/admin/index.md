@@ -11,9 +11,6 @@ is the inspiration for the CAL-ICOR JupyterHub deployment.
 ```{toctree}
 monitoring_alerting
 new_hub
+rebuild_hub_image
 calendar_scaler
-user_management
-hub_configuration
-hub_maintenance
-hub_troubleshooting
 ```

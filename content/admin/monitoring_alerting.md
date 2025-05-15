@@ -37,7 +37,7 @@ kubectl -n support port-forward deployment/support-prometheus-server 8000:9090
 
 then visit http://localhost:8000
 
-### Grafana 
+### Grafana
 
 [Grafana](https://grafana.com/) is used to visualize the metrics collected by
 Prometheus. Grafana is an open-source analytics and monitoring solution that
@@ -45,24 +45,24 @@ integrates with various data sources, including Prometheus. It provides a rich
 set of visualization options and allows users to create custom dashboards for
 monitoring their systems.
 
-Our Grafana instance is hosted at 
+Our Grafana instance is hosted at
 [https://grafana.cal-icor.org](https://grafana.cal-icor.org). You can log in
 using your GitHub credentials if you're part of the `Grafana Access` team. If
 you need access, please contact the CAL-ICOR team by creating a Github issue in
 the [cal-icor/cal-icor-hubs](https://github.com/cal-icor/cal-icor-hubs/issues)
 repository.
 
-Upstream documentation is found 
+Upstream documentation is found
 [here](https://jupyterhub-grafana.readthedocs.io/en/latest/index.html)
 
 ## Alerting
 
-We have set up alerting rules in Grafana and GCP Monitoring to notify the 
+We have set up alerting rules in Grafana and GCP Monitoring to notify the
 Cal-ICOR team of any issues with the JupyterHub deployment. These alerts are
 based on the metrics collected by Prometheus and are designed to help us
 proactively monitor the health and performance of the system.
 
-The alerts are configured to trigger notifications via 
+The alerts are configured to trigger notifications via
 [PagerDuty](https://cal-icor.pagerduty.com) and email, ensuring that the team
 is promptly informed of any critical issues that may arise. The alerts cover
 various aspects of the JupyterHub deployment, including resource usage, system

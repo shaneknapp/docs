@@ -15,12 +15,12 @@ the shared infrastructure of the GKE cluster.
 
 Working installs of the following utilities:
 
-  -   [chartpress](https://pypi.org/project/chartpress/)
-  -   [cookiecutter](https://pypi.org/project/cookiecutter/)
-  -   [gcloud](https://cloud.google.com/sdk/docs/install)
-  -   [hubploy](https://github.com/berkeley-dsep-infra/hubploy)
-  -   [kubectl](https://kubernetes.io/docs/tasks/tools/)
-  -   [sops](https://github.com/mozilla/sops/releases)
+- [chartpress](https://pypi.org/project/chartpress/)
+- [cookiecutter](https://pypi.org/project/cookiecutter/)
+- [gcloud](https://cloud.google.com/sdk/docs/install)
+- [hubploy](https://github.com/berkeley-dsep-infra/hubploy)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [sops](https://github.com/mozilla/sops/releases)
 
 The easiest way to install `chartpress`, `cookiecutter` and `hubploy` is to
 run `pip install -r dev-requirements.txt` from the root of the `cal-icor-hubs`
@@ -28,9 +28,9 @@ repo.
 
 Proper access to the following systems:
 
-  -   Google Cloud IAM: *owner*
-  -   Write access to the [CaliICOR hubs repo](https://github.com/cal-icor/cal-icor-hubs)
-  -   Owner or admin access to the [cal-icor Github organization](https://github.com/cal-icor/)
+- Google Cloud IAM: *owner*
+- Write access to the [CaliICOR hubs repo](https://github.com/cal-icor/cal-icor-hubs)
+- Owner or admin access to the [cal-icor Github organization](https://github.com/cal-icor/)
 
 ## Configuring a New Hub
 
@@ -123,16 +123,16 @@ gcloud filestore instances create <hubname>-<YYYY-MM-DD> \
 Or, from the web console, click on the horizontal bar icon at the top
 left corner.
 
-1.  Access "Filestore" > "Instances" and click on "Create Instance".
-2.  Name the instance `<hubname>-<YYYY-MM-DD>`
-3.  Instance Type is `Basic`, Storage Type is `HDD`.
-4.  Allocate capacity.
-5.  Set the region to `us-central1` and Zone to `us-central1-b`.
-6.  Set the VPC network to `default`.
-7.  Set the File share name to `shares`.
-8.  Click "Create" and wait for it to be deployed.
-9.  Once it's deployed, select the instance and copy the "NFS mount
-    point".
+1. Access "Filestore" > "Instances" and click on "Create Instance".
+2. Name the instance `<hubname>-<YYYY-MM-DD>`
+3. Instance Type is `Basic`, Storage Type is `HDD`.
+4. Allocate capacity.
+5. Set the region to `us-central1` and Zone to `us-central1-b`.
+6. Set the VPC network to `default`.
+7. Set the File share name to `shares`.
+8. Click "Create" and wait for it to be deployed.
+9. Once it's deployed, select the instance and copy the "NFS mount
+   point".
 
 Your new (but empty) NFS filestore must be seeded with a pair of
 directories. We run a utility VM for NFS filestore management; follow
@@ -146,14 +146,14 @@ NFS utility VM:
 gcloud compute ssh nfsserver --zone=us-central1-b --tunnel-through-iap
 ```
 
-Alternatively, launch console.cloud.google.com > Select *ucb-datahub-2018* as
-the project name.
+Alternatively, launch console.cloud.google.com > Select *cal-icor-hubs* as the
+project name.
 
-1.  Click on the three horizontal bar icon at the top left corner.
-2.  Access "Compute Engine" > "VM instances" > and search for
-    "nfs-server-01".
-3.  Select "Open in browser window" option to access NFS server via
-    GUI.
+1. Click on the three horizontal bar icon at the top left corner.
+2. Access "Compute Engine" > "VM instances" > and search for
+   "nfs-server-01".
+3. Select "Open in browser window" option to access NFS server via
+   GUI.
 
 Back in the NFS utility VM shell, mount the new share:
 
@@ -185,7 +185,7 @@ drwxr-xr-x 4 ubuntu ubuntu  16384 May 16 18:45 lacc-filestore
 
 ### Create the hub deployment locally
 
-In the `cal-icor-hubs/deployments` directory, run `cookiecutter`. This sets up
+From the `cal-icor-hubs/deployments` directory, run `cookiecutter`. This sets up
 the hub's configuration directory:
 
 ``` bash
@@ -280,28 +280,31 @@ pods on that node, then subtract the sum of all non-user pod memory
 requests and an additional 256Mi of "wiggle room". This final number
 will be used to allocate RAM for the node placeholder.
 
-1.  Launch a server on https://*hubname*.datahub.berkeley.edu
-2.  Get the node name (it will look something like
-    `gke-spring-2024-user-datahub-2023-01-04-fc70ea5b-67zs`):
-    `kubectl get nodes | grep *hubname* | awk '{print $1}'`
-3.  Get the total amount of memory allocatable to pods on this node and
-    convert to bytes:
-    ```bash
-    kubectl get node <nodename> -o jsonpath='{.status.allocatable.memory}'
-    ```
-4.  Get the total memory used by non-user pods/containers on this node.
+1. Launch a server on https://*hubname*.cal-icor.org
+2. Get the node name (it will look something like
+   `gke-spring-2025-user-base-fc70ea5b-67zs`):
+   `kubectl get nodes | grep *hubname* | awk '{print $1}'`
+3. Get the total amount of memory allocatable to pods on this node and
+   convert to bytes:
+
+   ```bash
+   kubectl get node <nodename> -o jsonpath='{.status.allocatable.memory}'
+   ```
+
+4. Get the total memory used by non-user pods/containers on this node.
     We explicitly ignore `notebook` and `pause`. Convert to bytes and
     get the sum:
-    ```bash
+
+   ```bash
     kubectl get -A pod -l 'component!=user-placeholder' \
       --field-selector spec.nodeName=<nodename> \
       -o jsonpath='{range .items[*].spec.containers[*]}{.name}{"\t"}{.resources.requests.memory}{"\n"}{end}' \
       | egrep -v 'pause|notebook'
     ```
 
-1.  Subtract the second number from the first, and then subtract another
-    277872640 bytes (256Mi) for "wiggle room".
-2.  Add an entry for the new placeholder node config in `values.yaml`:
+5. Subtract the second number from the first, and then subtract another
+   277872640 bytes (256Mi) for "wiggle room".
+6. Add an entry for the new placeholder node config in `values.yaml`:
 
 ```yaml
 data102:
@@ -340,14 +343,14 @@ prometheus-node-exporter
 
 Besides setting defaults, we can dynamically change the placeholder
 counts by either adding new, or editing existing, [calendar
-events](calendar-scaler.md).
+events](calendar_scaler.md).
 This is useful for large courses which can have placeholder nodes set
 aside for predicatable periods of heavy ramp up.
 
 ### Commit and deploy to `staging`
 
 Commit the hub directory, and make a PR to the the `staging` branch in
-the GitHub repo. 
+the GitHub repo.
 
 #### Hubs using a custom single-user server image
 
@@ -360,7 +363,7 @@ fail as the image sha of `PLACEHOLDER` doesn't exist.
 After this PR is merged, perform the `git push` in your image repo.  This will
 trigger the workflow that builds the image, pushes it to the Artifact Registry,
 and finally creates a commit that updates the image hash in `hubploy.yaml` and
-pushes to the datahub repo.  Once this is merged in to `staging`, the
+pushes to the `cal-icor-hubs` repo.  Once this is merged in to `staging`, the
 deployment pipeline will run and your hub will finally be deployed.
 
 #### Hubs inheriting an existing single-user server image

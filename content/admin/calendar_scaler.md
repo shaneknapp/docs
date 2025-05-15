@@ -128,14 +128,14 @@ functions.
 
 When you're ready, create a PR. The deployment workflow is as follows:
 
-1.  Get all authed-up for `chartpress` by performing the
-    [documented steps](rebuild-hub-image.qmd).
-2.  Run `chartpress --push` from the root
-    `datahub/` directory. If this succeeds, check your `git
-    status` and add
-    `datahub/node-placeholder/Chart.yaml` and
-    `datahub/node-placeholder/values.yml` to your PR.
-3.  Merge to `staging` and then `prod`.
+1. Get all authed-up for `chartpress` by performing the
+   [documented steps](rebuild-hub-image.qmd).
+2. Run `chartpress --push` from the root
+   `cal-icor-hubs/` directory. If this succeeds, check your `git
+   status` and add
+   `cal-icor-hubs/node-placeholder/Chart.yaml` and
+   `cal-icor-hubs/node-placeholder/values.yml` to your PR.
+3. Merge to `staging` and then `prod`.
 
 ### Changing python imports
 
@@ -143,22 +143,22 @@ The python requirements file is generated using
 `requirements.in` and `pip-compile`. If you need
 to change/add/update any packages, you'll need to do the following:
 
-1.  Ensure you have the correct python environment activated (see
-    above).
-2.  Pip install `pip-tools`
-3.  Edit `requirements.in` and save your changes.
-4.  Execute `pip-compile requirements.in`, which will update
-    the `requirements.txt`.
-5.  Check your git status and diffs, and create a pull request if
-    necessary.
-6.  Get all authed-up for `chartpress` by performing the
-    [documented steps](rebuild-hub-image.qmd).
-7.  Run `chartpress --push` from the root
-    `datahub/` directory. If this succeeds, check your `git
-    status` and add
-    `datahub/node-placeholder/Chart.yaml` and
-    `datahub/node-placeholder/values.yml` to your PR.
-8.  Merge to `staging` and then `prod`.
+1. Ensure you have the correct python environment activated (see
+   above).
+2. Pip install `pip-tools`
+3. Edit `requirements.in` and save your changes.
+4. Execute `pip-compile requirements.in`, which will update
+   the `requirements.txt`.
+5. Check your git status and diffs, and create a pull request if
+   necessary.
+6. Get all authed-up for `chartpress` by performing the
+   [documented steps](rebuild-hub-image.qmd).
+7. Run `chartpress --push` from the root
+   `cal-icor-hubs/` directory. If this succeeds, check your `git
+   status` and add
+   `cal-icor-hubs/node-placeholder/Chart.yaml` and
+   `cal-icor-hubs/node-placeholder/values.yml` to your PR.
+8. Merge to `staging` and then `prod`.
 
 ## Monitoring
 
