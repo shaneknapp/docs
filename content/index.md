@@ -13,11 +13,11 @@ This documentation is a living resource covering the following topics:
 - **[Authentication](authentication)**
 - **[User Environments](user_environments)**
 - **[Notebook and Material Sharing](notebooks_materials)**
-- **[Acceptable Use and Privacy Policies](policy/index.md)**
+- **[Acceptable Use and Privacy Policies](policy/index)**
 - **[Support Resources](support_resources)**
 
 For administrators, we provide additional resources:
-- **[Admin Guide](admin/index.md)**
+- **[Admin Guides](admin/index)**
 
 Feel free to explore the links above for more information on each topic.
 - **[Contributing](https://github.com/cal-icor/docs)**
