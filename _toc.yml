@@ -7,3 +7,4 @@ sections:
 - file: content/notebooks_materials
 - file: content/policy/index.md
 - file: content/support_resources
+- file: content/admin/index.md

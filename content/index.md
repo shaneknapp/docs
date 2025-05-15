@@ -16,5 +16,8 @@ This documentation is a living resource covering the following topics:
 - **[Acceptable Use and Privacy Policies](policy/index.md)**
 - **[Support Resources](support_resources)**
 
+For administrators, we provide additional resources:
+- **[Admin Guide](admin/index.md)**
+
 Feel free to explore the links above for more information on each topic.
 - **[Contributing](https://github.com/cal-icor/docs)**
