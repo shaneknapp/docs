@@ -32,7 +32,7 @@ jobs:
         run: jb build .
       
       - name: Copy CNAME
-        run: echo 'docs.cal-icor.org' > ./_build/CNAME
+        run: echo 'docs.cal-icor.org' > ./_build/html/CNAME
       
       - name: Deploy 🚀
         # Push the book's HTML to github-pages
