@@ -30,7 +30,10 @@ jobs:
       - name: Build Cal ICOR docs
         shell: bash -l {0}
         run: jb build .
-  
+      
+      - name: Copy CNAME
+        run: echo 'docs.cal-icor.org' > ./dist/CNAME
+      
       - name: Deploy 🚀
         # Push the book's HTML to github-pages
         uses: peaceiris/actions-gh-pages@v3.6.1
