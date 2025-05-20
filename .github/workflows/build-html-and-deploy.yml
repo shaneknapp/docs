@@ -31,8 +31,8 @@ jobs:
         shell: bash -l {0}
         run: jb build .
       
-      - name: Copy CNAME
-        run: echo 'docs.cal-icor.org' > ./_build/html/CNAME
+      - name: Copy CNAME Copy into final HTML output folder
+        run: cp CNAME ./_build/html/CNAME
       
       - name: Deploy 🚀
         # Push the book's HTML to github-pages
