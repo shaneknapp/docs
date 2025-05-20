@@ -250,8 +250,9 @@ Deleted file: deployments/newschool/secrets/staging.plain.yaml
 Secret file generation and encryption completed.
 ```
 
-If you pass the `-m` flag to the script, the cookiecutter template will prompt
-you to provide the following information:
+If you pass the `-m` flag to the script, the cookiecutter template will be read
+in from your config, and then prompt you to confirm or make changes to the
+following information:
 
 - `<hub_name>`: Enter the chosen name of the hub.
 - `<institution>`: Enter the name of the institution.
