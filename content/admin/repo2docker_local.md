@@ -53,7 +53,8 @@ Note that you may see (possibly harmless) architecture mismatch warnings with th
 
 You can instruct `repo2docker` to use your machine's local `docker` executable directly rather than the default of `docker-py`. You will first need to install [repo2podman](https://github.com/manics/repo2podman), a plugin that lets you use any container runtime with a command-line user interface similar to that of `docker`. This is useful if you want to leverage [docker buildx](https://github.com/docker/buildx/) (for things like multi-stage builds) or if you want to use an alternative executable like `podman`. This also eliminates architecture mismatch warnings.
 
-::: {.callout-warning}
+:::{admonition} WSL + repo2podman
+:class: warning
 repo2podman reportedly does not work yet on WSL.
 :::
 
