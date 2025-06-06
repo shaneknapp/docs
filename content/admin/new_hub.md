@@ -518,15 +518,11 @@ sure things work as you think they should.
 
 ### Create the alerts for the new hub
 
-From the `scripts` directory, run the following command to create the
-alerts for the new hub:
+Once you've deployed the new hub to `prod`, you must create the uptime alerts
+for the hub. From the `scripts` directory, run the following commands to create
+and enable the alerts for the new hub:
 
 ``` bash
-./create_alerts.py --create --namespaces <hubname>
-```
-
-After that's done, you need to enable the alerts in GCP:
-
-``` bash
-./create_alerts.py --enable --namespaces <hubname>
+./create_alerts.py --create --namespaces <hubname>-prod
+./create_alerts.py --enable --namespaces <hubname>-prod
 ```
