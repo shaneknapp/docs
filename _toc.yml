@@ -4,9 +4,9 @@ sections:
 - file: content/getting_started
 - file: content/authentication
 - file: content/hub_orientation
+- file: content/course_creation_workflow
 - file: content/user_environments
 - file: content/notebooks_materials
-- file: content/course_creation_workflow
 - file: content/policy/index
 - file: content/support_resources
 - file: content/admin/index
