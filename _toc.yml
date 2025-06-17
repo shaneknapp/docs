@@ -1,10 +1,10 @@
 format: jb-article
 root: content/index
 sections:
-- file: content/getting_started
-- file: content/authentication
 - file: content/hub_orientation
+- file: content/getting_started
 - file: content/course_creation_workflow
+- file: content/authentication
 - file: content/user_environments
 - file: content/notebooks_materials
 - file: content/policy/index
