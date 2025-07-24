@@ -9,7 +9,12 @@ Below is a typical set of steps for creating a course that uses JupyterHub:
 5. **Choose a method for distributing notebooks to students:**
    - Use **nbgitpuller links** to allow students to load each notebook directly (see the resources section for guidance).
    - Have students **download notebooks from GitHub** and upload them to the Hub manually.
-6. **Decide how students will submit their work.** Most commonly, students download notebooks from the Hub and upload them to your LMS (e.g., Canvas) or a grading platform such as Gradescope.
+6. **Optional: Upload datasets to the `shared_readwrite` folder** to your institution's hub if you want to provide datasets that are specific to your course. This allows students to access them directly from the `shared` folder.
+   - The `shared` folder is **read-only** and accessible to all students and instructors on a given JupyterHub. This is where students will access datasets that are commonly used across various courses instead of downloading them individually.
+   - The `shared_readwrite` folder is **read and write** and accessible to instructors.
+   - If you need access to the `shared_readwrite` folder, please [open an issue here](https://github.com/cal-icor/cal-icor-hubs/issues/new?template=admin_request.yaml).
+   - More details about these folders can be found in the [Materials Sharing](notebooks_materials.md#materials-sharing) section.
+7. **Decide how students will submit their work.** Most commonly, students download notebooks from the Hub and upload them to your LMS (e.g., Canvas) or a grading platform such as Gradescope.
 
 ---
 
