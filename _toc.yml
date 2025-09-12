@@ -9,4 +9,5 @@ sections:
 - file: content/notebooks_materials
 - file: content/policy/index
 - file: content/support_resources
+- file: content/faq
 - file: content/admin/index
