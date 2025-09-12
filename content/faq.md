@@ -20,3 +20,10 @@ A student may close their laptop, move on for a time period, then open their lap
 see the R-Studio interface and start "working". The work will not be saved and 403 errors will start to pop up in modal boxes as R Studio attempts to automatically save.
 
 The user should refresh the browser tab every time they begin to work in R Studio if they have been away from the computer for more than 30 minutes.
+
+## Can I add packages for R or Python?
+Yes. If you add the packages to your VM via pip install or the R package manager they will disappear between sessions.
+
+If you would like the packages to be permanently available for all users on your hub, please fill out the Package Request (GitHub issue)[https://github.com/cal-icor/cal-icor-hubs/issues/new?template=package_request.yml]. In most cases, we should be able to install the desired package(s).
+
+If you have a lot of packages you need installed you can fill a normal (GitHub Issue)[https://github.com/cal-icor/cal-icor-hubs/issues/new?template=BLANK_ISSUE] instead of package-by-package in the Package Request issue template.
