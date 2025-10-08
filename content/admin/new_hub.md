@@ -429,7 +429,7 @@ The definition for this image is located in `deployment/<hubname>/config/common.
 and looks like this:
 
 ``` yaml
-hub:
+jupyterhub:
   # a bunch of hub config here...
   # ...
   singleuser:
