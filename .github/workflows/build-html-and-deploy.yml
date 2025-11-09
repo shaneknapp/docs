@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Cal ICOR docs
         shell: bash -l {0}
-        run: jb build .
+        run: jupyter-book build .
       
       - name: Copy CNAME Copy into final HTML output folder
         run: cp CNAME ./_build/html/CNAME
