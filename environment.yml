@@ -8,4 +8,4 @@ dependencies:
   - pandas
   - matplotlib
   - pip:
-    - jupyter-book
+    - jupyter-book==1.0.4
