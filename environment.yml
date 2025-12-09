@@ -3,9 +3,10 @@ channels:
   - default
 dependencies:
   - python=3.9
-  - sphinx
   - pip
   - pandas
   - matplotlib
   - pip:
-    - jupyter-book==1.0.4
+    - jupyter-book==2.0.2
+    - mystmd
+    - ghp-import==2.1.0

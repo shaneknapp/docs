@@ -1,0 +1,46 @@
+version: 1
+
+project:
+  title: Cal-ICOR Documentation
+  description: Documentation for all things ICOR
+  authors:
+    - name: Cal-ICOR team
+  github: cal-icor/docs
+  execute:
+    execute_notebooks: cache
+
+  toc:
+    - file: index.md
+    - file: hub_orientation.md
+    - file: getting_started.md
+    - file: course_creation_workflow.md
+    - file: authentication.md
+    - file: user_environments.md
+    - file: notebooks_materials.md
+    - title: Policy
+      file: policy/index.md
+      children:
+        - file: policy/acceptable_use.md
+        - file: policy/privacy.md
+    - file: support_resources.md
+    - file: faq.md
+    - title: Admin
+      file: admin/index.md
+      children:
+        - file: admin/new_hub.md
+        - file: admin/new_image.md
+        - file: admin/rebuild_hub_image.md
+        - file: admin/repo2docker_local.md
+        - file: admin/monitoring_alerting.md
+        - file: admin/calendar_scaler.md
+
+site:
+  template: book-theme
+  options:
+    logo: assets/logo-trans.png
+    logo_text: Cal-ICOR Documentation
+    home_page_in_navbar: false
+    use_repository_button: true
+    use_issues_button: true
+    favicon: assets/favicon.ico
+

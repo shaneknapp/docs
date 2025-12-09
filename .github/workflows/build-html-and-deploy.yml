@@ -1,42 +1,58 @@
-name: Build HTML and Deploy to GH-PAGES
+name: Build & Deploy Jupyter Book
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
-  build-html-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@v4
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
-          auto-activate-base: false
-          miniconda-version: 'latest'
-          python-version: 3.9
-          environment-file: environment.yml
-          activate-environment: cal-icor-docs
+          python-version: '3.12'
 
-      - name: Build Cal ICOR docs
-        shell: bash -l {0}
-        run: jupyter-book build .
-      
-      - name: Copy CNAME Copy into final HTML output folder
-        run: cp CNAME ./_build/html/CNAME
-      
-      - name: Deploy 🚀
-        # Push the book's HTML to github-pages
-        uses: peaceiris/actions-gh-pages@v3.6.1
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build the book
+        timeout-minutes: 15
+        run: |
+          set -e
+          jupyter book build --html
+
+      - name: Copy CNAME into build output
+        if: ${{ hashFiles('CNAME') != '' }}
+        run: cp CNAME _build/html/CNAME
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_build/html
+          path: ./_build/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
