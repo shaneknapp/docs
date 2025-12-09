@@ -1,8 +1,10 @@
-name: Test Build (PRs)
+name: Test Build (branches/PRs)
 
 on:
+  push:
+    branches: ["**"]
   pull_request:
-    branches: [main]
+    branches: ["**"]
 
 permissions:
   contents: read
