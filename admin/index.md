@@ -8,11 +8,10 @@ These documents are heavily based on the
 [UC Berkeley Datahub documentation](https://docs.datahub.berkeley.edu/), which
 is the inspiration for the CAL-ICOR JupyterHub deployment.
 
-```{toctree}
-monitoring_alerting
-new_hub
-rebuild_hub_image
-calendar_scaler
-new_image
-repo2docker_local
-```
+- Admin topics:
+  - [Monitoring and alerting](monitoring_alerting)
+  - [Create a new hub](new_hub)
+  - [Rebuild hub image](rebuild_hub_image)
+  - [Autoscaling calendar](calendar_scaler)
+  - [Build a new image](new_image)
+  - [repo2docker locally](repo2docker_local)

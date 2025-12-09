@@ -13,12 +13,13 @@ This documentation is a living resource covering the following topics:
 
 - **[What is the Hub?](hub_orientation)**
 - **[Getting Started](getting_started)**
-- **[Authentication](authentication)**
 - **[Course Creation Workflow](course_creation_workflow)**
+- **[Authentication](authentication)**
 - **[User Environments](user_environments)**
 - **[Notebook and Material Sharing](notebooks_materials)**
 - **[Acceptable Use and Privacy Policies](policy/index)**
 - **[Support Resources](support_resources)**
+- **[Frequently Asked Questions](faq)**
 
 For administrators, we provide additional resources:
 

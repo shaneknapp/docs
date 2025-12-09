@@ -8,7 +8,6 @@ engagement.
 These policies are important for maintaining the integrity and security of the
 service, as well as fostering a positive community experience.
 
-```{toctree}
-acceptable_use
-privacy
-```
+- Policies:
+  - [Acceptable Use](acceptable_use)
+  - [Privacy](privacy)
