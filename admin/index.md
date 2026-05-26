@@ -11,6 +11,7 @@ is the inspiration for the CAL-ICOR JupyterHub deployment.
 - Admin topics:
   - [Monitoring and alerting](monitoring_alerting)
   - [Create a new hub](new_hub)
+  - [Overview and managing of user storage](user_storage)
   - [Rebuild hub image](rebuild_hub_image)
   - [Autoscaling calendar](calendar_scaler)
   - [Build a new image](new_image)
