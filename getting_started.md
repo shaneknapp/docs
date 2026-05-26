@@ -19,8 +19,8 @@ including using your institution's email address as an account.
 
 ## File Storage
 
-Each user has unlimited file storage.  Files and accounts will be removed from
-the service after three years of inactivity.  Cal-ICOR will monitor disk usage
+Each user has 10G file storage.  Files and accounts will be removed from
+the service after six years of inactivity.  Cal-ICOR will monitor disk usage
 and will notify users if they are using excessive disk space.
 
 ## Costs

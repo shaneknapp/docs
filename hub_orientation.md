@@ -17,7 +17,7 @@ The JupyterHub deployments are addressing various challenges in teaching Data an
 - **No configuration required by students**, allowing them to access materials and start working immediately.
 - **Authentication via your institution's credentials**, avoiding the need for separate accounts.
 - **Streamlined material distribution** for easy and reliable access.
-- **Persistent student storage**, removing the need for constant downloads of work.
+- **Persistent student storage**, removing the need for constant up and downloads of work.
 
 ---
 
