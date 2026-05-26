@@ -4,7 +4,7 @@
 
 We provide users with 10G of base user storage.  This is managed by our deployment of the [`jupyter-home-nfs` Helm chart](https://github.com/2i2c-org/jupyterhub-home-nfs), which is located in the `jupyterhub-home-nfs` [subdirectory in the `cal-icor-hubs` repo](https://github.com/cal-icor/cal-icor-hubs/tree/staging/jupyterhub-home-nfs).
 
-This chart deploys a pod named `home-nfs-\<hash\>-\<hash\>` in the `jupyterhub-home-nfs` namespace, with four containers running in total (`nfs-server`, `enforce-xfs-quota`, `auto-xfs-resizer` and `node-exporter`).
+This chart deploys a pod named `home-nfs-<hash>-<hash>` in the `jupyterhub-home-nfs` namespace, with four containers running in total (`nfs-server`, `enforce-xfs-quota`, `auto-xfs-resizer` and `node-exporter`).
 
 Any time a PR is opened to update something in that directory, Github Actions will add the `jupyterhub-home-nfs-deployment` label and, when merged to `staging`, will automatically deploy the chart via the [`deploy-jupyterhub-home-nfs.yaml` workflow](https://github.com/cal-icor/cal-icor-hubs/blob/staging/.github/workflows/deploy-jupyterhub-home-nfs.yaml).
 
@@ -18,7 +18,7 @@ To change the overall storage quota for all users, you simply update the `hard_q
 
 If you need to give a specific user a different quota, there are a few additional steps to perform.
 
-1. Get the user's jupyterhub user ID (**not** their email address!).  This will look something like `jupyter-username-host-edu---\<hash\>`.  This can be found by finding their user in `k9s`, via `kubectl` or sshing in to the `nfs-server` container and [checking the NFS mount directly](#shell-access-to-the-nfs-server).  They will need to have logged in at least once before for this to be created.
+1. Get the user's jupyterhub user ID (**not** their email address!).  This will look something like `jupyter-username-host-edu---<hash>`.  This can be found by finding their user in `k9s`, via `kubectl` or sshing in to the `nfs-server` container and [checking the NFS mount directly](#shell-access-to-the-nfs-server).  They will need to have logged in at least once before for this to be created.
 2. Using [sops](https://github.com/mozilla/sops/releases), edit [`jupyterhub-home-nfs/secrets/quota-overrides.yaml`] and add the login ID and desired quota to the dict.
 3. Save your changes, create a PR and deploy the chart on a merge to `staging`.
 
@@ -30,7 +30,7 @@ Sometimes you need the quota enforcer to ignore a directory (or directories).  T
 
 If you need to connect to the NFS server to debug a user's filesystem or perform any tasks, there are two methods to get a shell on the `nfs-server` container:
 
-1. Using `k9s`, select the `home-nfs-\<hash\>-\<hash\>` pod and hit enter. Then select the `nfs-server` container and hit `s`.
+1. Using `k9s`, select the `home-nfs-<hash>-<hash>` pod and hit enter. Then select the `nfs-server` container and hit `s`.
 2. Run the following `kubectl` command:
 
 ``` bash
