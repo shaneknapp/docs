@@ -33,6 +33,7 @@ project:
         - file: admin/repo2docker_local.md
         - file: admin/monitoring_alerting.md
         - file: admin/calendar_scaler.md
+        - file: admin/user_storage.md
 
 site:
   template: book-theme
