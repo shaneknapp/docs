@@ -10,6 +10,12 @@ Our current courses and documentation related to creating Jupyter notebooks are 
 
 For sharing datasets for coursework, we have shared folders available on your institution's JupyterHub deployment. These folders are designed to facilitate easy access to datasets for students and instructors alike.
 
+### Large file (>10G) uploads
+
+By default, all users (including admins) have a 10G storage quota for their home directories.  If you need to upload large datasets (>10G), do so directly to the `shared_readwrite` folder and **not** your own home directory.
+
+### How to use the shared folders
+
 Two folders are available:
 
 - **`shared`**: This folder is **read only**, and accessible to all students and instructors on a given Jupyerhub. This is where students will access datasets that are commonly used across various courses instead of downloading them individually.
