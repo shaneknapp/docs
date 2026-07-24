@@ -17,15 +17,19 @@ to the repo.
 
 There are two approaches to pre-populate the image's assets:
 
-1. Fork our [base-user-image](https://github.com/cal-icor/base-user-image).
+1. Use [base-user-image](https://github.com/cal-icor/base-user-image) as a template for the new image repo.
 Click "Use this template" > "Create a new repository". Be sure to follow
-convention and name the repo `<hubname>-user-image`, and the owner needs to be
+convention and name the repo `<some name>-user-image`, and the owner needs to be
 `cal-icor`. When that is done, create your own fork of the new repo.
 
 2. Use an existing image as a template. Browse through the
 [berkeley-dsep-infra image repos](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all)
 to find a hub that is similar to the one you are trying to create. This will
 give you a good starting point.
+
+If you find one that you like, use the step above to create a new repo from the
+template and then manually copy the files from the repo you want to base off of
+in to the new one, create a PR and go from there.
 
 ## Image Repository Settings
 
@@ -42,9 +46,9 @@ will be adding two new variables:
 
 1. `HUB`:  the name of the hub (eg: jupyter)
 
-1. `IMAGE`:  the Google Artifact Registry path and image name.  The path will
+2. `IMAGE`:  the Google Artifact Registry path and image name.  The path will
 always be `us-central1-docker.pkg.dev/cal-icor-hubs/user-images/<image-name>` and the
-image name will always be the same as the repo:  `<hubname>-user-image`.
+image name will always be the same as the repo:  `<some name>-user-image`.
 
 ## Disable Your Fork's Repository Settings
 
@@ -57,18 +61,16 @@ failure.
 To disable this for your fork, click on `Settings`, `Actions` and `General`.
 Check the `Disable actions` box and click save.
 
-### Enable Artifact Registry Pushing
+### Artifact Registry Pushing
 
-The image repository needs to be added to the list of allowed repositories in
-the `cal-icor` secrets. Go to the `cal-icor` [Secrets and
-Variables](https://github.com/organizations/cal-icor/settings/secrets/actions).
-Give your repository permissions to push to the Artifact Registry,
-as well as to push a branch to the [cal-icor-hubs repo](https://github.com/cal-icor/cal-icor-hubs).
-
-Edit both `IMAGE_BUILDER_CREATE_PR` and `GAR_SECRET_KEY`, and click on the gear icon,
-search for your repo name, check the box and save.
+Pushing built images to the Google Artifact Registry (GAR) uses
+[Workload Identity Federation](https://docs.cloud.google.com/iam/docs/workload-identity-federation),
+and is enabled by default.
 
 ### Configure `common.yaml`
+
+First, if the hub deployment isn't yet completed, please follow
+[the instructions](new_hub) and create a new hub deployment first.
 
 You need to let `helm` (via running `hubploy`) know the specifics of the image
 by updating your deployment's chart in `common.yaml`. Change the `name` of the
@@ -88,6 +90,10 @@ jupyterhub:
       name: us-central1-docker.pkg.dev/cal-icor-hubs/user-images/<hubname>-user-image
       tag: PLACEHOLDER
 ```
+
+You can also place image definitions in `staging.yaml` and `prod.yaml` if you
+want to test a specific image/tag combo and force either envorionment to
+override what's defined in `common.yaml`.
 
 Create a PR and merge to staging.  You can cancel the
 [`Deploy staging and prod hubs` job in Actions](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-hubs.yaml),
@@ -117,7 +123,7 @@ requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-r
 and [repo2docker](https://github.com/jupyter/repo2docker), and create a fork of
 the [cal-icor staging branch](https://github.com/cal-icor/cal-icor-hubs).
 
-1. Set up your git/dev environment by following the [image templat's
+1. Set up your git/dev environment by following the [image template's
 contributing
     guide](https://github.com/cal-icor/base-user-image/blob/main/CONTRIBUTING.md).
 
