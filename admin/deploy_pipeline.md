@@ -1,4 +1,4 @@
-# The Deployment Pipeline
+# The Hub/Cluster Deployment Pipeline
 
 Everything on the `spring-2025` cluster deploys from one workflow:
 [`deploy-spring-2025.yaml`](https://github.com/cal-icor/cal-icor-hubs/blob/staging/.github/workflows/deploy-spring-2025.yaml).
@@ -190,3 +190,75 @@ If a layer shows `false` or `skip`, check these in order of likelihood:
 is a parallel copy of this stack, built from the same script and the same layer
 model, with its own `*-dev` labels and its own SOPS key. It exists for testing
 changes to the pipeline itself against a throwaway cluster.
+
+## Wiring up a new stack workflow
+
+A label deploys nothing on its own. It has to name a layer in some stack
+workflow's spec, and each cluster gets its own stack. See
+[cluster infrastructure](infrastructure) for the tofu units and the labels
+themselves; this is the workflow half.
+
+Copy `deploy-dev.yaml` rather than the prod one. It is the same layer model with
+fewer prod-only exceptions, and it already covers cluster creation, which
+`spring-2025` predates.
+
+### The orchestrator
+
+Copy `deploy-dev.yaml` to `deploy-<cluster>.yaml` and change:
+
+- `concurrency.group` to `<cluster>-stack`, so this cluster serializes against
+  itself and not against another one.
+- The `DEV_*` variable references in the gate to your cluster's prefix.
+- Every `label:` in the `LAYER_SPEC` to the labels you created.
+- Every `uses: ./.github/workflows/deploy-dev-<layer>.yaml` to your own leaves.
+
+Drop the `nfs-volume` layer unless you need it. It exists on dev because a
+recreated NFS server can come back on a different ClusterIP, and the PV's
+`spec.nfs` is immutable.
+
+The layer spec is read by
+[`decide-layers.py`](https://github.com/cal-icor/cal-icor-hubs/blob/staging/.github/scripts/decide-layers.py),
+whose docstring defines every field (`label`, `always_on`, `shared_branch_only`,
+`when_on`/`when_off`, `implied_by`, `requires`, `destroy_label`). Pass `-d` to
+have it print the decision as YAML in the run log, the way the prod stack does.
+
+Give the cluster layer a `destroy_label` only if you want a merge-to-teardown
+path. Dev has none; its teardown is a dispatch on the leaf.
+
+### The leaves
+
+One reusable workflow per layer, each with a `workflow_call` trigger and its own
+`concurrency.group`. For the cluster leaf, point `tg_dir` at
+`tofu/clusters/<cluster>` and set `environment:` to the GitHub environment that
+fences the infra identity.
+
+A `uses:` pointing at a workflow that isn't on the branch fails the entire run
+before any `if:` is evaluated, so add all the leaves in the same PR as the
+orchestrator.
+
+### Variables and identities
+
+Create a repo variable set for the new prefix, mirroring `DEV_*` and `PROD_*`:
+
+| Variable | Used by |
+|---|---|
+| `<X>_CLUSTER`, `<X>_ZONE`, `<X>_PROJECT` | the gate's cluster probe |
+| `<X>_WIF_PROVIDER` | every job that authenticates |
+| `<X>_DEPLOY_SA` | the probe and the chart layers |
+| `<X>_INFRA_SA` | the cluster layer |
+
+The deploy identity needs `container.clusterViewer` for the probe, plus a
+`cluster-admin` RBAC binding inside the new cluster for the chart layers. Create
+the GitHub environment (`<cluster>-infra`) before the first run. The cluster leaf
+names it, and a missing environment fails the job.
+
+### Two things that bite
+
+The probe flag has to match the cluster's shape. `spring-2025` is regional and
+passes `--location`; dev is zonal and passes `--zone`. Both read a variable named
+`*_ZONE`, so `PROD_ZONE` actually holds a region.
+
+Nothing is wired until the labels exist and appear in the spec. Open the PR with
+the tofu units, the labeler entries, the orchestrator and the leaves together,
+then dispatch the stack with `cluster_command: plan` before letting a merge run
+an apply.
