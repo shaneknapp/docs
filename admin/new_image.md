@@ -1,85 +1,87 @@
 # Create a New Single User Image
 
-You might need to create a new user image when deploying a new hub, or changing
-from a shared single user server image. We use
-[repo2docker](https://github.com/jupyterhub/repo2docker) to generate our images.
+A user image is the environment a student lands in: the packages, the kernels, the
+RStudio install if there is one. Each one lives in its own repo under
+[cal-icor](https://github.com/cal-icor/), gets built by
+[repo2docker](https://github.com/jupyterhub/repo2docker), and is pushed to the
+`user-images` Artifact Registry repository.
 
-There are two approaches to creating a repo2docker image:
+The shared
+[base-user-image](https://github.com/cal-icor/base-user-image) is typically
+sufficient for most hubs.
 
-1. Use a repo2docker-style image [template](https://github.com/cal-icor/base-user-image) (environment.yaml, etc)
-2. Use a [Dockerfile](https://github.com/berkeley-dsep-infra/datahub-user-image/tree/main) (useful for larger/more complex images)
+Create a new image when a course needs software the base image does not have,
+or needs a version of something the other hubs cannot move to.
 
-Generally, we prefer to use the first (`repo2docker`) approach.
+Building is all CI. Merge a change, and Actions builds the image, pushes it, and
+opens a PR against `cal-icor-hubs` bumping the tag. Merging that PR deploys the
+hub(s) that use the image.
 
-If we need to install software as `root`, you can add a
-[Dockerfile.appendix](https://repo2docker.readthedocs.io/en/latest/usage.html#cmdoption-jupyter-repo2docker-appendix)
-to the repo.
+## The short version
 
-There are two approaches to pre-populate the image's assets:
+1. [Create the repo](#create-the-repository) from the `base-user-image` template.
+2. [Set `IMAGE`, and `HUB` if the image backs a hub](#repository-settings).
+3. [Turn off Actions on your fork](#disable-actions-on-your-fork).
+4. [Point the hub's config at the image](#point-a-hub-at-the-image) with a
+   `PLACEHOLDER` tag.
+5. [Register the repo](#register-the-repo) in `configs/image-repos.txt` and Slack.
+6. [Edit the image](#edit-the-image), test it locally, PR it.
+7. [Merge to `main`](#the-build-loop) and merge the PR the build opens.
 
-1. Use [base-user-image](https://github.com/cal-icor/base-user-image) as a template for the new image repo.
-Click "Use this template" > "Create a new repository". Be sure to follow
-convention and name the repo `<some name>-user-image`, and the owner needs to be
-`cal-icor`. When that is done, create your own fork of the new repo.
+## Create the repository
 
-2. Use an existing image as a template. Browse through the
-[berkeley-dsep-infra image repos](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all)
-to find a hub that is similar to the one you are trying to create. This will
-give you a good starting point.
+[base-user-image](https://github.com/cal-icor/base-user-image) is a template repo.
+Use this template, then Create a new repository. The owner has to be `cal-icor`,
+and the name has to end in `-user-image`, since the repo name is also the image
+name. Fork it afterwards and work from the fork.
 
-If you find one that you like, use the step above to create a new repo from the
-template and then manually copy the files from the repo you want to base off of
-in to the new one, create a PR and go from there.
+The template ships the pieces repo2docker reads (`environment.yml`, `apt.txt`,
+`runtime.txt`, `postBuild`, `start`), both CI workflows, and the two test suites.
 
-## Image Repository Settings
+If the image needs software installed as `root`, add a
+[Dockerfile.appendix](https://repo2docker.readthedocs.io/en/latest/usage.html#cmdoption-jupyter-repo2docker-appendix).
+For something genuinely complicated, a plain
+[Dockerfile](https://github.com/cal-icor/csumb-user-image/tree/main)
+works too, but prefer repo2docker.
 
-There are now a few steps to set up the CI/CD for the new image repo.  In the
-`cal-icor` image repo, click on `Settings`, and under `General`,
-scroll down to `Pull Requests` and check the box labeled `Automatically delete
-head branches`.
+To base the image on an existing one rather than `base-user-image`, still create
+the repo from the template, then copy the other image's files in. That way the
+workflows and settings stay right.
 
-Scroll back up to the top of the settings, and in the left menu bar, click on
-`Secrets and variables`, and then `Actions`.
+## Repository settings
 
-From there, click on the `Variables` tab and then `New repository variable`. We
-will be adding two new variables:
+Under Settings, General, Pull Requests, check Automatically delete head branches.
 
-1. `HUB`:  the name of the hub (eg: jupyter)
+Under Settings, Secrets and variables, Actions, Variables tab, add:
 
-2. `IMAGE`:  the Google Artifact Registry path and image name.  The path will
-always be `us-central1-docker.pkg.dev/cal-icor-hubs/user-images/<image-name>` and the
-image name will always be the same as the repo:  `<some name>-user-image`.
+| Variable | Value | Required |
+|---|---|---|
+| `IMAGE` | `cal-icor-hubs/user-images/<repo name>` | always |
+| `HUB` | the hub name, for example `csumb` | only if a hub deploys this image |
 
-## Disable Your Fork's Repository Settings
+`IMAGE` has no registry hostname in it. The workflow supplies
+`us-central1-docker.pkg.dev`, and the same string is what it greps for in the hub
+configs, so it has to match what `common.yaml` says after the hostname.
 
-Now you will want to disable Github Actions for your fork of the image repo.
-If you don't, whenever you push PRs to the root repo the workflows *in your
-fork* will attempt to run, but don't have the proper permissions to
-successfully complete.  This will then send you a nag email about a workflow
-failure.
+`HUB` is the deployment name the auto-PR's branch and title use. Leave it unset for
+an image nothing deploys directly, like
+[base-python-image](https://github.com/cal-icor/base-python-image); the build then
+stops after pushing to the registry.
 
-To disable this for your fork, click on `Settings`, `Actions` and `General`.
-Check the `Disable actions` box and click save.
+### Disable Actions on your fork
 
-### Artifact Registry Pushing
+Settings, Actions, General, Disable actions, Save.
 
-Pushing built images to the Google Artifact Registry (GAR) uses
-[Workload Identity Federation](https://docs.cloud.google.com/iam/docs/workload-identity-federation),
-and is enabled by default.
+Otherwise every push to your fork runs the workflows there. They lack the
+permissions to finish, so they fail and GitHub nags you about it each time.
 
-### Configure `common.yaml`
+## Point a hub at the image
 
-First, if the hub deployment isn't yet completed, please follow
-[the instructions](new_hub) and create a new hub deployment first.
+The hub has to exist first. If it does not, please
+[create a new hub](new_hub) before this.
 
-You need to let `helm` (via running `hubploy`) know the specifics of the image
-by updating your deployment's chart in `common.yaml`. Change the `name` of the
-image in `deployments/<hubname>/config/common.yaml` to point to your new image
-name, and after the name add `PLACEHOLDER` in place of the image sha.  This
-will be automatically updated after your new image is built and pushed to the
-Artifact Registry.
-
-Example:
+In `deployments/<hubname>/config/common.yaml`, set the image name and put
+`PLACEHOLDER` where the tag goes:
 
 ```yaml
 jupyterhub:
@@ -91,61 +93,84 @@ jupyterhub:
       tag: PLACEHOLDER
 ```
 
-You can also place image definitions in `staging.yaml` and `prod.yaml` if you
-want to test a specific image/tag combo and force either envorionment to
-override what's defined in `common.yaml`.
+The first build replaces `PLACEHOLDER` with the image SHA. `staging.yaml` and
+`prod.yaml` can carry their own image block to pin one environment to a specific
+tag, and they override `common.yaml`.
 
-Create a PR and merge to `staging`.  Strip the `hub: <name>` label before you
-merge:  the image doesn't exist yet, so a hub deploy would fail on the
-`PLACEHOLDER` tag.  With no hub label on the PR the hub layer resolves an empty
-list and skips.  See [the deployment pipeline](deploy_pipeline).
+Merge that to `staging` with the `hub: <name>` label stripped. The image does not
+exist yet, so a deploy would fail on the `PLACEHOLDER` tag. With no hub label the
+hub layer resolves an empty list and skips. See
+[the deployment pipeline](deploy_pipeline).
 
-## Subscribe to GitHub Repo in Slack
+## Register the repo
 
-Go to the #cal-icor-bots channel, and run the following command:
+Add the new repo to
+[`configs/image-repos.txt`](https://github.com/cal-icor/cal-icor-hubs/blob/staging/configs/image-repos.txt)
+in `cal-icor-hubs`. It is the canonical list of image repos, and what fleet-wide
+sweeps clone from. Commented-out lines are images no longer in use.
+
+Then subscribe the channel to it. In `#cal-icor-bots`:
 
 ``` bash
-/github subscribe cal-icor/<your repo name>
+/github subscribe cal-icor/<repo name>
 ```
 
-## Modify the Image
+## Edit the image
 
-This step is straightforward: create a feature branch, and edit, delete, or add
-any files to configure the image as needed.
+Create a feature branch and change whatever the course needs. `environment.yml`
+holds the conda packages and is where most of the work happens. Pin versions if
+possible.
 
-We also strongly recommend copying `README-template.md` over the default
-`README.md`, and modifying it to replace all occurrences of `<HUBNAME>` with
-the name of your image.
+Copy `README-template.md` over `README.md` and replace `<IMAGE-NAME>` throughout.
 
-## Submit Pull Requests
+Build it locally before you push. CI gives a build 90 minutes; a broken
+`environment.yml` fails locally in a fraction of that.
 
-Familiarize yourself with [pull
-requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
-and [repo2docker](https://github.com/jupyter/repo2docker), and create a fork of
-the [cal-icor staging branch](https://github.com/cal-icor/cal-icor-hubs).
+Full instructions, including the extra arguments Apple silicon needs, are in
+[testing repo2docker locally](repo2docker_local.md) and in the image repo's own
+README.
 
-1. Set up your git/dev environment by following the [image template's
-contributing
-    guide](https://github.com/cal-icor/base-user-image/blob/main/CONTRIBUTING.md).
+Two optional test directories, both shipped by the template and both run by CI when
+present:
 
-2. [Test the image locally](repo2docker_local.md) using `repo2docker`.
-3. Submit a PR to `staging`.
-4. Commit and push your changes to your fork of the image repo, and
-    create a new pull request at
-    `https://github.com/cal-icor/<hubname-user-image>`.
-5. After the build passes, merge your PR in to `main` and the image will
-    be built again and pushed to the Artifact Registry.  If that succeeds,
-    then a commit will be crafted that will update the `PLACEHOLDER` field in
-    `common.yaml` with the image's SHA and pushed to the `cal-icor-hubs` repo.
-    You can check on the progress of this workflow in your root image repo's
-    `Actions` tab.
-6. After the previous step is completed successfully, go to the
-    `cal-icor-hubs` repo and click on the [New pull
-    request](https://github.com/cal-icor/cal-icor-hubs/compare)
-    button.  Next, click on the `compare: staging` drop down, and you should see
-    a branch named something like `update-<hubname>-image-tag-<SHA>`.  Select
-    that, and create a new pull request.
+- `image-tests/` holds pytest notebook and R tests, run against the built image.
+- `browser-tests/` starts the image as a JupyterLab server on port 8888 and drives
+  its REST and WebSocket API with Playwright.
 
-7. Once the checks have passed, merge to `staging` and your new image will be
-    deployed!  You can watch the progress in the [Deploy spring-2025 cluster
-    stack workflow](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-spring-2025.yaml).
+## The build loop
+
+Two workflows, both thin callers of
+[shared-workflows](https://github.com/cal-icor/shared-workflows). They pin a tag,
+not a branch, so bumping the shared workflow is a deliberate edit.
+
+`build-test-image.yaml` runs on every PR. It builds and tests, but never pushes, so
+a broken `environment.yml` fails here rather than in the registry.
+
+`build-push-create-pr.yaml` runs on merge to `main`. It builds, pushes to the
+registry tagged with the commit SHA, runs the browser tests against what it just
+built, then rewrites the tag in every `common.yaml` in `cal-icor-hubs` that
+references this image and opens a PR against `staging`. The PR comes from
+`cal-icor-create-pr-bot` on a branch named `update-<hub>-image-tag-<sha>`, and its
+body links back to the image PR that triggered it.
+
+Neither runs for changes to the READMEs, `LICENSE`, `.github/**` or the `images/`
+screenshots. The push build also skips the two test directories; the PR build does
+not, so a change to a test still gets tested.
+
+The loop:
+
+1. PR your branch against `main`. Wait for the test build.
+2. Merge it. Watch the build in the repo's Actions tab.
+3. Find the PR it opened in
+   [cal-icor-hubs](https://github.com/cal-icor/cal-icor-hubs/pulls), check the diff
+   is only tag changes, and merge it to `staging`.
+4. Watch
+   [the deploy](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-spring-2025.yaml).
+
+:::{admonition} A shared image deploys every hub that uses it
+:class: warning
+The tag update is not scoped to one hub. It rewrites every `common.yaml` that
+references the image, so the PR picks up a hub label for each one and merging
+deploys all of them at once. A recent `base-user-image` bump touched 16 files and
+carried 15 hub labels. Check the label list on the PR before merging.
+:::
