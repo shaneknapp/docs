@@ -95,9 +95,10 @@ You can also place image definitions in `staging.yaml` and `prod.yaml` if you
 want to test a specific image/tag combo and force either envorionment to
 override what's defined in `common.yaml`.
 
-Create a PR and merge to staging.  You can cancel the
-[`Deploy staging and prod hubs` job in Actions](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-hubs.yaml),
-or just let it fail.
+Create a PR and merge to `staging`.  Strip the `hub: <name>` label before you
+merge:  the image doesn't exist yet, so a hub deploy would fail on the
+`PLACEHOLDER` tag.  With no hub label on the PR the hub layer resolves an empty
+list and skips.  See [the deployment pipeline](deploy_pipeline).
 
 ## Subscribe to GitHub Repo in Slack
 
@@ -145,5 +146,6 @@ contributing
     a branch named something like `update-<hubname>-image-tag-<SHA>`.  Select
     that, and create a new pull request.
 
-7. Once the checks has passed, merge to `staging` and your new image will be
-    deployed!  You can watch the progress in the [deploy-hubs workflow](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-hubs.yaml).
+7. Once the checks have passed, merge to `staging` and your new image will be
+    deployed!  You can watch the progress in the [Deploy spring-2025 cluster
+    stack workflow](https://github.com/cal-icor/cal-icor-hubs/actions/workflows/deploy-spring-2025.yaml).

@@ -9,10 +9,11 @@ These documents are heavily based on the
 is the inspiration for the CAL-ICOR JupyterHub deployment.
 
 - Admin topics:
-  - [Monitoring and alerting](monitoring_alerting)
-  - [Create a new hub](new_hub)
-  - [Overview and managing of user storage](user_storage)
-  - [Rebuild hub image](rebuild_hub_image)
   - [Autoscaling calendar](calendar_scaler)
   - [Build a new image](new_image)
   - [repo2docker locally](repo2docker_local)
+  - [Overview and managing of user storage](user_storage)
+  - [Hub deployment pipeline](deploy_pipeline)
+  - [Monitoring and alerting](monitoring_alerting)
+  - [Create a new hub](new_hub)
+  - [Rebuild hub image](rebuild_hub_image)
