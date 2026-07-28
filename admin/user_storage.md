@@ -6,7 +6,7 @@ We provide users with 10G of base user storage.  This is managed by our deployme
 
 This chart deploys a pod named `home-nfs-<hash>-<hash>` in the `jupyterhub-home-nfs` namespace, with four containers running in total (`nfs-server`, `enforce-xfs-quota`, `auto-xfs-resizer` and `node-exporter`).  The backing disk mounted by NFS is defined in `values.yaml`.
 
-Any time a PR is opened to update something in that directory, Github Actions will add the `jupyterhub-home-nfs-deployment` label and, when merged to `staging`, will automatically deploy the chart via the [`deploy-jupyterhub-home-nfs.yaml` workflow](https://github.com/cal-icor/cal-icor-hubs/blob/staging/.github/workflows/deploy-jupyterhub-home-nfs.yaml).
+Any time a PR is opened to update something in that directory, Github Actions will add the `jupyterhub-home-nfs-deployment` label, and merging to `staging` deploys the chart as the `nfs` layer of the [deployment pipeline](deploy_pipeline).
 
 ## Updating the Chart version
 

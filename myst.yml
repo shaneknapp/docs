@@ -27,13 +27,14 @@ project:
     - title: Admin
       file: admin/index.md
       children:
-        - file: admin/new_hub.md
-        - file: admin/new_image.md
-        - file: admin/rebuild_hub_image.md
-        - file: admin/repo2docker_local.md
-        - file: admin/monitoring_alerting.md
         - file: admin/calendar_scaler.md
+        - file: admin/new_image.md
+        - file: admin/repo2docker_local.md
         - file: admin/user_storage.md
+        - file: admin/deploy_pipeline.md
+        - file: admin/monitoring_alerting.md
+        - file: admin/new_hub.md
+        - file: admin/rebuild_hub_image.md
 
 site:
   template: book-theme
