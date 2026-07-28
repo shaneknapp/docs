@@ -32,6 +32,7 @@ project:
         - file: admin/repo2docker_local.md
         - file: admin/user_storage.md
         - file: admin/deploy_pipeline.md
+        - file: admin/infrastructure.md
         - file: admin/monitoring_alerting.md
         - file: admin/new_hub.md
         - file: admin/rebuild_hub_image.md
