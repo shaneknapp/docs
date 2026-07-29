@@ -40,7 +40,7 @@ First, install the Google Cloud SDK, then the GKE auth plugin. `kubectl` 1.26+
 will not talk to GKE without it and the error message does not say so clearly.
 
 ``` bash
-gcloud components install gke-gcloud-auth-plugin`
+gcloud components install gke-gcloud-auth-plugin
 ```
 
 #### GCP
