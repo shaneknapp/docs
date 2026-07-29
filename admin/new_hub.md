@@ -343,3 +343,80 @@ The `cal-icor-hubs` PR has to merge before the new image configuration is pushed
 to `main` in the image repo. The image build workflow updates the tag in
 `deployments/<name>/config/common.yaml`, so that file has to exist first.
 :::
+
+## Update the `cloudbank-pilot-hub-users` repo with generated auth tokens
+
+The [`cloudbank-pilot-hub-users`](https://github.com/cal-icor/cloudbank-pilot-hub-users)
+repo runs a nightly dashboard job that queries each Cal-ICOR hub's
+`/hub/api/users` endpoint to report the number of users per hub for reporting
+purposes. Under JupyterHub 5.x, an API token can't list users unless it's
+explicitly granted the scopes to do so, so each hub defines a read-only service account, `cloudbank-pilot-hub-users`, for this purpose.
+
+The dashboard only ever queries **production** hubs, so this service account
+only needs to exist in each hub's `prod` config/secrets — it is not set up for `staging`.
+
+### The role stanza
+
+Each hub's `deployments/<hub>/config/prod.yaml` defines a `loadRoles` entry
+granting the `cloudbank-pilot-hub-users` service `list:users` and `read:users` scopes:
+
+``` yaml
+jupyterhub:
+  hub:
+    loadRoles:
+      cloudbank-pilot-hub-users:
+        services:
+          - cloudbank-pilot-hub-users
+        scopes:
+          - list:users
+          - read:users
+```
+
+If a hub's `prod.yaml` doesn't define this role and stanza, its `prod` config
+should be updated to include one when the service account is added or its
+tokens rotated.
+
+### The per-hub token
+
+Each hub also defines a **unique** SOPS-encrypted API token for the service,
+in `deployments/<hub>/secrets/prod.yaml`:
+
+``` yaml
+jupyterhub:
+  hub:
+    services:
+      cloudbank-pilot-hub-users:
+        apiToken: <unique per-hub token>
+```
+
+### Generating and setting a token
+
+This is automatically generated when deploying a new hub with
+`create_deployment.sh`. If you need to generate one manually, please run the
+following command and update that deployment's `secrets/prod.yaml`.
+
+``` bash
+openssl rand -hex 32
+```
+
+### Keeping it in sync with cloudbank-pilot-hub-users
+
+The dashboard authenticates using these same tokens, so whenever a hub's token
+is created here, the **same value** must also be updated in the
+[`cloudbank-pilot-hub-users`](https://github.com/sean-morris/cloudbank-pilot-hub-users)
+repo's `enc-pilots.json`, in the `token` field of the pilot entry matching this
+hub (matched by `url`, where `where: icor`).
+
+You can get the generated token to put in `enc-pilots.json` by running:
+
+``` bash
+sops -d --extract '["jupyterhub"]["hub"]["services"]["cloudbank-pilot-hub-users"]["apiToken"]' \
+  deployments/<hub>/secrets/prod.yaml
+```
+
+`sops` prints the token without a trailing newline, so zsh appends a `%` to the
+line. It is not part of the token.
+
+If the two repos' tokens drift, the dashboard will get a `403` /
+`Missing or invalid credentials` error querying that hub until they're
+brought back in sync.
