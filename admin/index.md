@@ -9,6 +9,7 @@ These documents are heavily based on the
 is the inspiration for the CAL-ICOR JupyterHub deployment.
 
 - Admin topics:
+  - [Admininistrator authentication](admin_auth)
   - [Autoscaling calendar](calendar_scaler)
   - [Build a new image](new_image)
   - [repo2docker locally](repo2docker_local)

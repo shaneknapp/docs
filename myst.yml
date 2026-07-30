@@ -27,6 +27,7 @@ project:
     - title: Admin
       file: admin/index.md
       children:
+        - file: admin/admin_auth.md
         - file: admin/calendar_scaler.md
         - file: admin/new_image.md
         - file: admin/repo2docker_local.md
