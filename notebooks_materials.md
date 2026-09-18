@@ -14,6 +14,8 @@ For sharing datasets for coursework, we have shared folders available on your in
 
 By default, all users (including admins) have a 10G storage quota for their home directories.  If you need to upload large datasets (>10G), do so directly to the `shared_readwrite` folder and **not** your own home directory.
 
+For more information on debugging users' home directories with large files, please see the [FAQ entry for further instructions](/faq.md#my-student-or-myself-is-unable-to-save-or-upload-files-to-their-home-directory).
+
 ### How to use the shared folders
 
 Two folders are available:
