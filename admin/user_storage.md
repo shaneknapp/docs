@@ -26,6 +26,26 @@ Sometimes you need the quota enforcer to ignore a directory (or directories).  T
 
 ## NFS diagnostics, troubleshooting and admin tasks
 
+### Disk usage for a user
+
+Since users have a 10G storage quota, and it's not a straightforward task for a user to check how much disk space they're actually using due to the way that disks are reported by the system and NFS, we have the [Jupyterhub Usage Quotas](https://github.com/2i2c-org/jupyterhub-usage-quotas) installed.
+
+As admins, we can check a user's disk usage by [SSHing in to the NFS pod](#shell-access-to-the-nfs-server) and running `du -shx` in the user's home directory, or using the [Home Directory Usage Dashboard](https://grafana.jupyter.cal-icor.org/d/688c04dba0500904/home-directory-usage-dashboard?orgId=1&from=now-6h&to=now&timezone=utc&var-PROMETHEUS_DS=P1809F7CD0C75ACF3&var-hub=$__all) panel in [Grafana](https://grafana.jupyter.cal-icor.org).
+
+:::{admonition} You cannot view other user's `quota-reporter` disk usage stats!
+:class: warning
+If you have Admin access, and become another user, the `quota-reporter` service will not show their disk usage, but your own.
+:::
+
+A user can check their own filesystem usage by visiting the `Services` tab located on the Hub Control Panel (from Jupyterlab:  File --> Hub Control Panel --> Services --> usage-quota).
+
+![usage-quota](/assets/usage-quota.gif)
+
+:::{admonition} The `quota-reporter` service does not update immediately!
+:class: warning
+There will be a short delay in the actual disk spaced used as determined by `jupyterhub-home-nfs` being exported and consumed by `jupyterhub-usage-quotas`, so users might not see the actual amount of space they are using.  Always confirm this by checking their filesystem directly by [checking their homedir directly in NFS](#shell-access-to-the-nfs-server).
+:::
+
 ### Disk usage, monitoring and alerting
 
 There is a policy named `NFS home-dir disk >=90% full (jupyterhub-homedirs-2026-04-08)` that will send alerts to both email and PagerDuty when the underlying disk hit 90% capacity.  You should check the [Grafana Home Directory Usage](https://grafana.jupyter.cal-icor.org/d/e2984e42-dfa8-4155-a956-a5bc1c710d3f/home-directory-usage-dashboard?orgId=1&from=now-6h&to=now&timezone=utc&var-PROMETHEUS_DS=P1809F7CD0C75ACF3&var-hub=$__all) panel to see if this is a shared directory, or [shell in to the NFS server](#shell-access-to-the-nfs-server) and look around in `/export` to find the offending folder.

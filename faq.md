@@ -1,5 +1,30 @@
 # Frequently Asked Questions
 
+## My student (or myself) is unable to save or upload files to their home directory
+
+This is usually discovered when a Notebook or R project auto-save fails (or is turned off), or you get an error akin to 'No space left on device'.
+
+We have a 10G storage quota for all users' home directories.  You can check your quota (or instruct the student(s)) by looking the `usage-quota` under the `Services` tab located on the Hub Control Panel (from the Jupyterlab interface:  File --> Hub Control Panel --> Services --> usage-quota).
+
+![usage-quota](/assets/usage-quota.gif)
+
+Alternatively, you can get to the Hub Control Panel directly by visiting the following URL: `https://<your institution>.jupyter.cal-icor.org/hub/home`
+
+:::{admonition} You cannot view other user's `quota-reporter` disk usage stats!
+:class: warning
+If you have Admin access, and become another user, the `quota-reporter` service will not show their disk usage, but your own.
+:::
+
+This usually occurs when the user does the following in their home directory:
+
+1. Copies large files of datasets from the `shared/` folder
+2. Installs large python or R packages
+3. Downloads or uploads large files from their laptop or general internet
+
+Please delete any large folders and/or files to free up disk space.  If you're having issues deleting the files and require additional assistance, please open a [GitHub Issue](https://github.com/cal-icor/cal-icor-hubs/issues/new).
+
+If you feel that you require a larger quota that 10G, open a [GitHub Issue for your hub deployment](https://github.com/cal-icor/cal-icor-hubs/issues/new?template=additional_storage_request.yaml).
+
 ## Can I see my students servers?
 
 Yes! You need to navigate to Admin section of the server. To request administrator access, please create a [GitHub Issue for your hub deployment](https://github.com/cal-icor/cal-icor-hubs/issues/new?template=admin_request.yaml) and we will get that deployed immediately.
