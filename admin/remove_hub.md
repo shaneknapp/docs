@@ -21,12 +21,11 @@ described in the [Creating a New Hub](new_hub) document.
 1. [Delete the alerts](#delete-the-alert-policy).
 2. [Delete the `prod` and `staging` Helm deployments](#delete-the-helm-deployments).
 3. [Archive or delete the `prod` folder on the NFS server](#archive-or-delete-nfs-storage).
-4. [Remove deployment from GitHub labeler action](#remove-deployment-from-labeler-action).
+4. [Remove deployment from GitHub labeler action, GitHub labels and issue templates](#remove-deployment-label-label-action-entry-and-issue-templates).
 5. [Remove deployment folder under `cal-icor-hubs/deployments/`](#remove-deployment-from-hub-repo).
-6. [Delete GitHub labels and URLs in the Issue templates](#update-github).
-7. [Review local changes and create a PR](#review-your-changes).
-8. [Review and merge](#review-and-merge) the changes from steps (5) and (6).
-9. [Delete the CiLogon client](#delete-the-cilogon-client)
+6. [Review local changes and create a PR](#review-your-changes).
+7. [Review and merge](#review-and-merge) the changes from steps (5) and (6).
+8. [Delete the CiLogon client](#delete-the-cilogon-client)
 
 ## Delete the alert policy
 
@@ -77,27 +76,23 @@ Then, you can delete the directory by running:
 kubectl exec -n jupyterhub-home-nfs ${pod_name} -- sh -c "rm -rf/export/<hubname>"
 ```
 
-## Remove deployment from labeler action
+## Remove deployment label, label action entry and issue templates
 
-Create a new feature branch from `staging` in your local clone of
+This step is required before removing anything else from the `cal-icor-hubs`
+repository.  If you combine all of the changes/deletions as described in this
+doc in to a single PR you will then need to both manually delete the labels in
+the PR, as well as the labels themselves.  This is because GitHub helpfully
+re-creates the deleted labels when the labeler action runs against a fresh PR.
+
+First, create a new feature branch from `staging` in your local clone of
 `cal-icor-hubs` before continuing:
 
 ``` bash
-github checkout -b remove-<hubname>
+github checkout -b remove-<hubname>-gha
 ```
 
-Edit `.github/labeler.yml` and remove the hub's entry located towards the end
-of this file.
-
-## Remove deployment from hub repo
-
-Next, delete the folder under `deployments/` for this hub:
-
-``` bash
-git rm -rf deployments/<hubname>
-```
-
-## Update GitHub
+Then edit `.github/labeler.yml` and remove the hub's entry located towards the
+end of this file.
 
 Next, we will remove the GitHub labels and the URLs in the GitHub Issue
 template folder.
@@ -107,7 +102,8 @@ gh label delete "hub: <hubname>"
 ```
 
 Edit the follow files found in the `.github/ISSUE_TEMPLATE/` folder and remove
-the hub's URL from each one:
+the hub's URL from each one.  While not strictly necessary at this point in the
+process, we lump it in here as it's part of the GitHub ecosystem:
 
 ``` bash
 additional_storage_request.yaml
@@ -115,6 +111,25 @@ admin_request.yaml
 cpu_template.yml
 memory_request.yml
 package_request.yml
+```
+
+### Review your changes, create a PR and merge to `staging`
+
+Confirm that the changes you've made are all correct with `git status` and
+`git diff`, and then create a PR with these changes in the `cal-icor-hubs` repo
+and merge it to `staging` before contiuing.
+
+## Remove deployment from hub repo
+
+:::{admonition} Sync your repo!
+:class: attention
+Be sure to sync your local repo to `upstream` and create a new feature branch before continuing!
+:::
+
+Now you can delete the folder under `deployments/` for this hub:
+
+``` bash
+git rm -rf deployments/<hubname>
 ```
 
 ## Review your changes
