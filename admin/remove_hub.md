@@ -88,7 +88,7 @@ First, create a new feature branch from `staging` in your local clone of
 `cal-icor-hubs` before continuing:
 
 ``` bash
-github checkout -b remove-<hubname>-gha
+git checkout -b remove-<hubname>-gha
 ```
 
 Then edit `.github/labeler.yml` and remove the hub's entry located towards the
