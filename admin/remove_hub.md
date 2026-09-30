@@ -132,6 +132,13 @@ merged to prod at your leisure.
 
 ## Delete the CiLogon client
 
+:::{admonition} Older CiLogon clients may not be able to be manually deleted!
+:class: attention
+Since our original CiLogon clients were created by the CiLogon team, we aren't
+access or delete them through our CLI tool.  You'll need to reach out to them
+directly at <help@cilogon.org> with the URL of the removed hub.
+:::
+
 Run the following command to delete the deployment's CiLogon client:
 
 ``` bash
