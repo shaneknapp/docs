@@ -37,6 +37,7 @@ project:
         - file: admin/monitoring_alerting.md
         - file: admin/new_hub.md
         - file: admin/rebuild_hub_image.md
+        - file: admin/remove_hub.md
 
 site:
   template: book-theme

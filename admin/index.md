@@ -19,3 +19,4 @@ is the inspiration for the CAL-ICOR JupyterHub deployment.
   - [Monitoring and alerting](monitoring_alerting)
   - [Create a new hub](new_hub)
   - [Rebuild hub image](rebuild_hub_image)
+  - [Remove a hub](remove_hub)
