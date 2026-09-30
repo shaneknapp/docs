@@ -18,7 +18,7 @@ described in the [Creating a New Hub](new_hub) document.
 
 ## The canonical list of steps to remove a hub deployment
 
-1. [Disable the GCP alerts](#disable-gcp-alert-policy).
+1. [Delete the alerts](#delete-the-alert-policy).
 2. [Delete the `prod` and `staging` Helm deployments](#delete-the-helm-deployments).
 3. [Archive or delete the `prod` folder on the NFS server](#archive-or-delete-nfs-storage).
 4. [Remove deployment from GitHub labeler action](#remove-deployment-from-labeler-action).
@@ -26,25 +26,27 @@ described in the [Creating a New Hub](new_hub) document.
 6. [Delete GitHub labels and URLs in the Issue templates](#update-github).
 7. [Review local changes and create a PR](#review-your-changes).
 8. [Review and merge](#review-and-merge) the changes from steps (5) and (6).
-9. [Delete the alerts](#delete-the-alerts).
+9. [Delete the CiLogon client](#delete-the-cilogon-client)
 
-## Disable GCP alert policy
+## Delete the alert policy
 
+Go back to the GCP console, and under Monitoring -> Alerting, click on the
+deployment's Policy and then click on Delete
 If you don't disable the alerts, a page will be sent off when GCP is unable to
 reach the `prod` deployment of the hub you're removing.
 
 Open up the [GCP console](https://console.cloud.google.com/) and using the
 sidebar, navigate to Monitoring -> Alerting.  Search for the deployment's
-Policy, and disable this deployment.
+Policy, click on the link, and then click on "Delete".
 
 ## Delete the Helm deployments
 
 Ensure you're logged in to GCP on the command line, and run the following two
-commands (replace `<deployment>` with the hub name):
+commands (replace `<hubname>` with the hub name):
 
 ``` bash
-helm delete -n <deployment>-prod <deployment>-prod
-helm delete -n <deployment>-staging <deployment>-staging
+helm delete -n <hubname>-prod <hubname>-prod
+helm delete -n <hubname>-staging <hubname>-staging
 ```
 
 This effectively deletes the hub's kubernetes deployments.
@@ -63,7 +65,7 @@ To archive the deployment's NFS directories, run the following commands:
 
 ``` bash
 pod_name=$(kubectl get pod -n jupyterhub-home-nfs -l app.kubernetes.io/component=nfs-server -o "jsonpath={.items[0].metadata.name}")
-kubectl exec -n jupyterhub-home-nfs ${pod_name} -- sh -c "tar -zcvf /export/<deployment>.tar.gz /export/<deployment> && ls -l /export/<deployment>.tar.gz"
+kubectl exec -n jupyterhub-home-nfs ${pod_name} -- sh -c "tar -zcvf /export/<hubname>.tar.gz /export/<hubname> && ls -l /export/<hubname>.tar.gz"
 ```
 
 Be sure that the deployment's homedir archive has been created before deleting
@@ -72,7 +74,7 @@ anything.
 Then, you can delete the directory by running:
 
 ``` bash
-kubectl exec -n jupyterhub-home-nfs ${pod_name} -- sh -c "rm -rf/export/<deployment>"
+kubectl exec -n jupyterhub-home-nfs ${pod_name} -- sh -c "rm -rf/export/<hubname>"
 ```
 
 ## Remove deployment from labeler action
@@ -81,7 +83,7 @@ Create a new feature branch from `staging` in your local clone of
 `cal-icor-hubs` before continuing:
 
 ``` bash
-github checkout -b remove-<deployment>
+github checkout -b remove-<hubname>
 ```
 
 Edit `.github/labeler.yml` and remove the hub's entry located towards the end
@@ -92,7 +94,7 @@ of this file.
 Next, delete the folder under `deployments/` for this hub:
 
 ``` bash
-git rm -rf deployments/<deployment>
+git rm -rf deployments/<hubname>
 ```
 
 ## Update GitHub
@@ -101,7 +103,7 @@ Next, we will remove the GitHub labels and the URLs in the GitHub Issue
 template folder.
 
 ``` bash
-gh label delete "hub: <deployment>"
+gh label delete "hub: <hubname>"
 ```
 
 Edit the follow files found in the `.github/ISSUE_TEMPLATE/` folder and remove
@@ -128,7 +130,10 @@ and that the hub's labels aren't added to the PR.
 Once you're happy that things look good, merge to `staging`.  This can be
 merged to prod at your leisure.
 
-## Delete the alerts
+## Delete the CiLogon client
 
-Go back to the GCP console, and under Monitoring -> Alerting, click on the
-deployment's Policy and then click on Delete
+Run the following command to delete the deployment's CiLogon client:
+
+``` bash
+./scripts/cilogon_clients.py remove <hubname>
+```
